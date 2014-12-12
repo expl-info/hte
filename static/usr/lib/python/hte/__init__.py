@@ -15,24 +15,24 @@ class Elem(object):
     tags may be identified.
     """
 
-    def __init__(self, tag, children=None, ids=None, classes=None, attrs=None, empty=None, ht=None):
+    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, empty=None, ht=None):
         self.tag = tag
         self.children = []
-        self.ids = []
-        self.classes = []
+        self._id = None
+        self._class = None
         self.attrs = {}
         self.ht = ht
-        self.set(children, ids=ids, classes=classes, attrs=attrs, empty=empty)
+        self.set(children, _id=_id, _class=_class, attrs=attrs, empty=empty)
 
     def set(self, *args, **kwargs):
         children = args and args[0] or None
         if children != None:
             self.children = []
             self.add(children)
-        if "ids" in kwargs:
-            self.ids = kwargs["ids"] and kwargs["ids"][:]
-        if "classes" in kwargs:
-            self.classes = kwargs["classes"] and kwargs["classes"][:]
+        if "_id" in kwargs:
+            self._id = kwargs["_id"]
+        if "_class" in kwargs:
+            self._class = kwargs["_class"]
         if "empty" in kwargs:
             self.empty = kwargs["empty"]
         if "attrs" in kwargs:
@@ -66,8 +66,8 @@ class Elem(object):
         if self.tag:
             l.append("<%s %s %s %s>" \
                 % (self.tag,
-                    self.ids and " ".join(["id=%s" % quoteattr(v) for v in self.ids]) or "",
-                    self.classes and " ".join(["class=%s" % quoteattr(v) for v in self.classes]) or "",
+                    self._id != None and ("id=%s" % quoteattr(v)) or "",
+                    self._class != None and ("class=%s" % quoteattr(v)) or "",
                     self.attrs and " ".join(["%s=%s" % (k, quoteattr(v)) for k, v in self.attrs.items()]) or ""))
         for child in self.children:
             if type(child) in types.StringTypes:
