@@ -68,7 +68,7 @@ class Elem(object):
                 % (self.tag,
                     self._id != None and ("id=%s" % quoteattr(v)) or "",
                     self._class != None and ("class=%s" % quoteattr(v)) or "",
-                    self.attrs and " ".join(["%s=%s" % (k, quoteattr(v)) for k, v in self.attrs.items()]) or ""))
+                    self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
         for child in self.children:
             if type(child) in types.StringTypes:
                 l.append(escape(child))
