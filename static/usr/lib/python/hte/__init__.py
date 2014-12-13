@@ -6,23 +6,26 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+from __future__ import absolute_import
+
+import string
 import types
 from xml.sax.saxutils import escape, quoteattr
 
 class Elem(object):
     """Generic element with tag specified. Children are optional, as
-    are id, class, and generic element attribute settings. Empty
-    tags may be identified.
+    are id, class, and generic element attribute settings. Void
+    element tags may be identified.
     """
 
-    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, empty=None, ht=None):
+    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, ht=None):
         self.tag = tag
         self.children = []
         self._id = None
         self._class = None
         self.attrs = {}
         self.ht = ht
-        self.set(children, _id=_id, _class=_class, attrs=attrs, empty=empty)
+        self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
 
     def set(self, *args, **kwargs):
         children = args and args[0] or None
@@ -33,8 +36,8 @@ class Elem(object):
             self._id = kwargs["_id"]
         if "_class" in kwargs:
             self._class = kwargs["_class"]
-        if "empty" in kwargs:
-            self.empty = kwargs["empty"]
+        if "void" in kwargs:
+            self.void = kwargs["void"]
         if "attrs" in kwargs:
             self.attrs = kwargs["attrs"] or {}
         return self
@@ -79,7 +82,7 @@ class Elem(object):
             else:
                 # warn?
                 pass
-        if self.tag and not self.empty:
+        if self.tag and not self.void:
             l.append("</%s>" % self.tag)
         return l
 
