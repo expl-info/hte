@@ -100,3 +100,44 @@ class Raw:
 
     def render(self):
         return self.txt
+
+class BaseTree:
+    """Dynamically supports methods named to match tags subject to
+    configuration.
+    """
+
+    def __init__(self, **kwargs):
+        self._top = Elem(None, ht=self)
+        self._warnings = []
+
+        # flags
+        self._anytag = kwargs.get("anytag", False)
+        self._attrminimize = kwargs.get("attrminimize", False)
+        self._voidtags = kwargs.get("voidtags", [])
+        self._ignorecase = kwargs.get("ignorecase", False)
+        self._lowercase = kwargs.get("lowercase", False)
+
+        tags = kwargs.get("tags", [])
+        voidtags = kwargs.get("voidtags", [])
+        if self._lowercase or self._ignorecase:
+            tags = map(string.lower, tags)
+            voidtags = map(string.lower, voidtags)
+        self._tags = tags
+        self._voidtags = voidtags
+        self._tagsd = dict([(name, None) for name in self._tags])
+        self._voidtagsd = dict([(name, None) for name in self._voidtags])
+
+    def __getattr__(self, attr):
+        tag = self._ignorecase and attr.lower() or attr
+        isvoidtag = tag in self._voidtagsd
+        if tag in self._tagsd or self._anytag:
+            if not self._lowercase:
+                tag = attr
+            return Elem(tag, void=isvoidtag, ht=self).set
+        raise AttributeError(attr)
+
+    def __str__(self):
+        return str(self._top)
+
+    def _elem(self, *args, **kwargs):
+        return Elem(*args, **kwargs)

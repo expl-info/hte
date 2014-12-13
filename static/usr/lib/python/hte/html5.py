@@ -6,7 +6,8 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-from . import Elem, Raw
+
+from hte import Elem, Raw, BaseTree
 
 TAGS = [
     "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio",
@@ -32,31 +33,29 @@ TAGS = [
     "var", "video",
     "wbr",
 ]
-TAG_METHODS = dict([(name.capitalize(), name) for name in TAGS])
 
-EMPTY_TAGS = [ "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input",
+VOIDTAGS = [ "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input",
     "isindex", "link", "meta", "param"
 ]
-EMPTY_TAGS = dict([(name, None) for name in EMPTY_TAGS])
 
-class Html5Tree:
+def Html5Tree():
+    attrs = {
+        "anytag": False,
+        "attrminimize": True,
+        "ignorecase": True,
+        "lowercase": True,
+        "tags": TAGS,
+        "voidtags": VOIDTAGS,
+    }
+    return BaseTree(**attrs)
 
-    def __init__(self):
-        self.top = Elem(None, ht=self)
-        self.warnings = []
-
-    def __getattr__(self, attr):
-        tag = TAG_METHODS.get(attr)
-        if tag:
-            # Return "set" method on new Elem object.
-            return Elem(tag, empty=tag in EMPTY_TAGS, ht=self).set
-        raise AttributeError(attr)
-
-    def __str__(self):
-        return str(self.top)
-
-    def render(self):
-        return self.top.render()
-
-    def raw(self, *args, **kwargs):
-        return Raw(*args, **kwargs)
+def XHtml5Tree():
+    attrs = {
+        "anytag": False,
+        "ignorecase": False,
+        "lowercase": True,
+        "attrminimize": False,
+        "tags": TAGS,
+        "voidtags": VOIDTAGS,
+    }
+    return BaseTree(**attrs)
