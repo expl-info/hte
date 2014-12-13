@@ -21,8 +21,6 @@ class Elem(object):
     def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, ht=None):
         self.tag = tag
         self.children = []
-        self._id = None
-        self._class = None
         self.attrs = {}
         self.ht = ht
         self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
@@ -32,14 +30,15 @@ class Elem(object):
         if children != None:
             self.children = []
             self.add(children)
+        attrs = attrs or {}
         if "_id" in kwargs:
-            self._id = kwargs["_id"]
+            attrs["id"] = _id
         if "_class" in kwargs:
-            self._class = kwargs["_class"]
+            attrs["class"] = _class
+        if "attrs" in kwargs:
+            self.attrs = attrs
         if "void" in kwargs:
             self.void = kwargs["void"]
-        if "attrs" in kwargs:
-            self.attrs = kwargs["attrs"] or {}
         return self
 
     def add(self, children):
@@ -69,10 +68,8 @@ class Elem(object):
         """
         l = []
         if self.tag:
-            l.append("<%s %s %s %s>" \
+            l.append("<%s %s>" \
                 % (self.tag,
-                    self._id != None and ("id=%s" % quoteattr(v)) or "",
-                    self._class != None and ("class=%s" % quoteattr(v)) or "",
                     self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
         for child in self.children:
             if type(child) in types.StringTypes:
