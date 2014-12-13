@@ -12,34 +12,11 @@ import string
 import types
 from xml.sax.saxutils import escape, quoteattr
 
-class Elem(object):
-    """Generic element with tag specified. Children are optional, as
-    are id, class, and generic element attribute settings. Void
-    element tags may be identified.
-    """
+class Node(object):
 
-    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, ht=None):
-        self.tag = tag
-        self.children = []
-        self.attrs = {}
+    def __init__(self, children=None, ht=None):
+        self.children = children or []
         self.ht = ht
-        self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
-
-    def set(self, *args, **kwargs):
-        children = args and args[0] or None
-        if children != None:
-            self.children = []
-            self.add(children)
-        attrs = attrs or {}
-        if "_id" in kwargs:
-            attrs["id"] = _id
-        if "_class" in kwargs:
-            attrs["class"] = _class
-        if "attrs" in kwargs:
-            self.attrs = attrs
-        if "void" in kwargs:
-            self.void = kwargs["void"]
-        return self
 
     def add(self, children):
         """Add zero/one or more children.
@@ -47,7 +24,7 @@ class Elem(object):
         if type(children) != types.ListType:
             children = [children]
         for child in children:
-            if isinstance(child, Elem):
+            if isinstance(child, Node):
                 if type(self.ht) != type(child.ht):
                     # dissimilar builders
                     self.ht.warnings.append("mismatched tree type for child (%s)" % child)
@@ -63,6 +40,48 @@ class Elem(object):
         return children and children[0]
 
     def render(self):
+        """Render all children to a flat list and return.
+        """
+        l = []
+        for child in self.children:
+            if isinstance(child, Node) or isinstance(child, Raw):
+                l.extend(child.render())
+            elif type(child) in types.StringTypes:
+                l.append(escape(child))
+            else:
+                # warn?
+                pass
+        return l
+
+class Elem(Node):
+    """Generic element with tag specified. Children are optional, as
+    are id, class, and generic element attribute settings. Void
+    element tags may be identified.
+    """
+
+    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, ht=None):
+        Node.__init__(self, children, ht=ht)
+        self.tag = tag
+        self.attrs = {}
+        self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
+
+    def set(self, *args, **kwargs):
+        children = args and args[0] or None
+        if children != None:
+            self.children = []
+            self.add(children)
+        attrs = kwargs.get("attrs") or {}
+        if "_id" in kwargs and kwargs["_id"] != None:
+            attrs["id"] = kwargs["_id"]
+        if "_class" in kwargs and kwargs["_class"] != None:
+            attrs["class"] = kwargs["_class"]
+        if "attrs" in kwargs:
+            self.attrs = attrs
+        if "void" in kwargs:
+            self.void = kwargs["void"]
+        return self
+
+    def render(self):
         """Render the current element and its children, returning
         them in a flat list.
         """
@@ -71,14 +90,7 @@ class Elem(object):
             l.append("<%s %s>" \
                 % (self.tag,
                     self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
-        for child in self.children:
-            if type(child) in types.StringTypes:
-                l.append(escape(child))
-            elif isinstance(child, Elem) or isinstance(child, Raw):
-                l.extend(child.render())
-            else:
-                # warn?
-                pass
+        l.extend(Node.render(self))
         if self.tag and not self.void:
             l.append("</%s>" % self.tag)
         return l
