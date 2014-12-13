@@ -53,6 +53,8 @@ class Elem(object):
             elif type(child) in types.StringTypes \
                 or isinstance(child, Raw):
                 self.children.append(child)
+            elif hasattr(child, "render") and callable(child.render):
+                self.children.append(child)
             else:
                 # warn?
                 pass
