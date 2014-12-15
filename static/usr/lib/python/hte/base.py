@@ -39,6 +39,36 @@ class Node(object):
                 pass
         return children and children[0]
 
+    def match(self, node, **kwargs):
+        return False
+
+    def find(self, node, matchfn=None, **kwargs):
+        l = self.findn(node, 1, matchfn, **kwargs)
+        return l and l[0] or None
+
+    def findall(self, node, matchfn=None, **kwargs):
+        return self.findn(node, 1<<31, matchfn, **kwargs)
+
+    def findn(self, node, count, matchfn=None, **kwargs):
+        l = []
+        for i, child in enumerate(self.children):
+            if type(node) == type(child):
+                if isinstance(node, Node):
+                    if matchfn:
+                        if matchfn(node, **kwargs):
+                            l.append((self, i))
+                    elif child.match(node, **kwargs):
+                        l.append((self, i))
+                    if len(l) < count:
+                        rv = child.findn(node, count)
+                        if rv != None:
+                            l.extend(rv)
+                elif node == child:
+                    l.append((self, i))
+                if len(l) >= count:
+                    break
+        return l
+
     def render(self):
         """Render all children to a flat list and return.
         """
@@ -80,6 +110,15 @@ class Elem(Node):
         if "void" in kwargs:
             self.void = kwargs["void"]
         return self
+
+    def match(self, node, **kwargs):
+        if self.tag == node.tag:
+            if kwargs.get("matchattrs"):
+                for k, v in node.attrs.items():
+                    if self.attrs.get(k) != v:
+                        return False
+            return True
+        return False
 
     def render(self):
         """Render the current element and its children, returning
