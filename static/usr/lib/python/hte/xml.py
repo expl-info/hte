@@ -6,9 +6,9 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-from hte import Elem, Raw, BaseTree
+from __future__ import absolute_import
 
-def XmlTree():
+from hte.base import Elem, Raw, BaseTree
     attrs = {
         "anytag": True,
         "ignorecase": False,
