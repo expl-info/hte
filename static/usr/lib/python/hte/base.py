@@ -115,7 +115,7 @@ class Elem(Node):
             self.void = kwargs["void"]
         return self
 
-    def __str__(self):
+    def render(self):
         """Return the rendered list as a "joined" string.
         """
         return "".join(self._render())
@@ -165,8 +165,8 @@ class BaseTree:
             return Elem(tag, void=isvoidtag, ht=self).set
         raise AttributeError(attr)
 
-    def __str__(self):
-        return str(self._top)
-
     def _elem(self, *args, **kwargs):
         return Elem(*args, **kwargs)
+
+    def render(self):
+        return self._top.render()
