@@ -18,6 +18,20 @@ class Node(object):
         self.children = children or []
         self.ht = ht
 
+    def _render(self):
+        """Render all children to a flat list and return.
+        """
+        l = []
+        for child in self.children:
+            if isinstance(child, Node) or isinstance(child, Raw):
+                l.extend(child._render())
+            elif type(child) in types.StringTypes:
+                l.append(escape(child))
+            else:
+                # warn?
+                pass
+        return l
+
     def add(self, children):
         """Add zero/one or more children.
         """
@@ -32,7 +46,7 @@ class Node(object):
             elif type(child) in types.StringTypes \
                 or isinstance(child, Raw):
                 self.children.append(child)
-            elif hasattr(child, "render") and callable(child.render):
+            elif hasattr(child, "_render") and callable(child._render):
                 self.children.append(child)
             else:
                 # warn?
@@ -59,20 +73,6 @@ class Node(object):
                     break
         return l
 
-    def render(self):
-        """Render all children to a flat list and return.
-        """
-        l = []
-        for child in self.children:
-            if isinstance(child, Node) or isinstance(child, Raw):
-                l.extend(child.render())
-            elif type(child) in types.StringTypes:
-                l.append(escape(child))
-            else:
-                # warn?
-                pass
-        return l
-
 class Elem(Node):
     """Generic element with tag specified. Children are optional, as
     are id, class, and generic element attribute settings. Void
@@ -84,6 +84,20 @@ class Elem(Node):
         self.tag = tag
         self.attrs = {}
         self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
+
+    def _render(self):
+        """Render the current element and its children, returning
+        them in a flat list.
+        """
+        l = []
+        if self.tag:
+            l.append("<%s %s>" \
+                % (self.tag,
+                    self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
+        l.extend(Node._render(self))
+        if self.tag and not self.void:
+            l.append("</%s>" % self.tag)
+        return l
 
     def set(self, *args, **kwargs):
         children = args and args[0] or None
@@ -101,24 +115,10 @@ class Elem(Node):
             self.void = kwargs["void"]
         return self
 
-    def render(self):
-        """Render the current element and its children, returning
-        them in a flat list.
-        """
-        l = []
-        if self.tag:
-            l.append("<%s %s>" \
-                % (self.tag,
-                    self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
-        l.extend(Node.render(self))
-        if self.tag and not self.void:
-            l.append("</%s>" % self.tag)
-        return l
-
     def __str__(self):
         """Return the rendered list as a "joined" string.
         """
-        return "".join(self.render())
+        return "".join(self._render())
 
 class Raw:
     """Raw/unprocessed text.
@@ -127,7 +127,7 @@ class Raw:
     def __init__(self, txt):
         self.txt = txt
 
-    def render(self):
+    def _render(self):
         return self.txt
 
 class BaseTree:
