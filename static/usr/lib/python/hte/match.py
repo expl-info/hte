@@ -16,6 +16,17 @@ from types import StringTypes
 
 from hte.base import Elem
 
+class Matcher:
+
+	def __init__(self, node, matchfn):
+		self.node = node
+		self.matchfn = matchfn
+
+	def match(self, child):
+		if self.matchfn == None:
+			return True
+		return self.matchfn(child, self.node)
+
 def matchtext(child, node, **kwargs):
 	return type(child) in StringTypes \
 		and type(node) in StringTypes \

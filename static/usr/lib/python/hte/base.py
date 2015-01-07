@@ -12,11 +12,37 @@ import string
 import types
 from xml.sax.saxutils import escape, quoteattr
 
+FIND_PATH = 1
+FIND_ELEM = 2
+
 class Node(object):
 
     def __init__(self, children=None, ht=None):
         self.children = children or []
         self.ht = ht
+
+    def _findn(self, count, matcher, parent, path, findtype):
+        """A generator to return matches according to the provided
+        matcher. Returned values are matched elements or the full
+        path to the element (relative to the base element).
+        """
+        path = path or [parent]
+        for i, child in enumerate(parent.children):
+            if matcher.match(child):
+                if findtype == FIND_PATH:
+                    yield path+[child]
+                    count -= 1
+                else:
+                    yield child
+                    count -= 1
+                if count <= 0:
+                    return
+            if isinstance(child, Node):
+                for val in self._findn(count, matcher, child, path+[child], findtype):
+                    yield val
+                    count -= 1
+                    if count <= 0:
+                        return
 
     def _render(self):
         """Render all children to a flat list and return.
@@ -53,25 +79,20 @@ class Node(object):
                 pass
         return children and children[0]
 
-    def find(self, node, matchfn=None, **kwargs):
-        l = self.findn(node, 1, matchfn, **kwargs)
-        return l and l[0] or None
+    def find(self, matcher, findtype=FIND_ELEM):
+        """Return a generator to find a single/first match.
+        """
+        return self._findn(1, matcher, self, None, findtype)
 
-    def findall(self, node, matchfn=None, **kwargs):
-        return self.findn(node, 1<<31, matchfn, **kwargs)
+    def findall(self, matcher, findtype=FIND_ELEM):
+        """Return a generator to find all matches.
+        """
+        return self.findn(1<<31, matcher, findtype)
 
-    def findn(self, node, count, matchfn, **kwargs):
-        l = []
-        for i, child in enumerate(self.children):
-            if matchfn(child, node, **kwargs):
-                l.append((self, i))
-                if len(l) >= count:
-                    break
-            if isinstance(child, Node):
-                l.extend(child.findn(node, count, matchfn))
-                if len(l) >= count:
-                    break
-        return l
+    def findn(self, count, matcher, findtype=FIND_ELEM):
+        """Return a generator to find n matches.
+        """
+        return self._findn(count, matcher, self, None, findtype)
 
 class Elem(Node):
     """Generic element with tag specified. Children are optional, as
