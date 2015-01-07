@@ -168,7 +168,9 @@ class BaseTree:
         if tag in self._tagsd or self._anytag:
             if not self._lowercase:
                 tag = attr
-            return Elem(tag, void=isvoidtag, ht=self).set
+            def _Elem(*args, **kwargs):
+                return Elem(tag, *args, void=isvoidtag, ht=self, **kwargs)
+            return _Elem
         raise AttributeError(attr)
 
     def _elem(self, *args, **kwargs):
