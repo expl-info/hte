@@ -88,6 +88,9 @@ class Elem(Node):
     def __str__(self):
         return "<Elem tag=%s nattrs=%s nchildren=%s>" % (self.tag, len(self.attrs), len(self.children))
 
+    def __repr__(self):
+        return self.__str__()
+
     def _render(self):
         """Render the current element and its children, returning
         them in a flat list.
