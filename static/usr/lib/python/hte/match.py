@@ -18,60 +18,58 @@ from hte.base import Elem
 
 class Matcher:
 
-	def __init__(self, node, matchfn):
-		self.node = node
+	def __init__(self, x, matchfn):
+		self.x = x
 		self.matchfn = matchfn
 
 	def match(self, child):
 		if self.matchfn == None:
 			return True
-		return self.matchfn(child, self.node)
+		return self.matchfn(child, self.x)
 
-def matchany(child, node, **kwargs):
+def matchany(child, x, **kwargs):
 	"""Match against text or element.
 	"""
 	if type(child) in StringTypes:
-		return matchtext(child, node)
+		return matchtext(child, x)
 	elif isinstance(child, Elem):
-		return matchelem(child, node)
+		return matchelem(child, x)
 
-def matchchildregexp(child, node, **kwargs):
+def matchchildregexp(child, x, **kwargs):
 	"""Match against element with a child that matches against a
 	compiled regexp.
 	"""
 	return isinstance(child, Elem) \
 		and child.children \
-		and matchregexp(child.children[0], node)
+		and matchregexp(child.children[0], x)
 
-def matchchildtext(child, node, **kwargs):
+def matchchildtext(child, x, **kwargs):
 	"""Match against element with a child that matches against text.
 	"""
 	return isinstance(child, Elem) \
 		and child.children \
-		and matchtext(child.children[0], node)
+		and matchtext(child.children[0], x)
 
-def matchelem(child, node, **kwargs):
+def matchelem(child, x, **kwargs):
 	"""Match against an element.
 	"""
-	if type(child) == type(node) \
-		and isinstance(child, Elem) \
-		and child.tag == node.tag \
-		and len(child.attrs) == len(node.attrs):
+	if isinstance(child, Elem) \
+		and child.tag == x.tag \
+		and len(child.attrs) == len(x.attrs):
 		for k, v in child.attrs.items():
-			if k not in node.attrs or v != node[attrs]:
+			if k not in x.attrs or v != x[attrs]:
 				return False
 		return True
 	return False
 
-def matchregexp(child, node, **kwargs):
+def matchregexp(child, x, **kwargs):
 	"""Match against a compiled regexp.
 	"""
 	return type(child) in StringTypes \
-		and node.match(child)
+		and x.match(child)
 
-def matchtext(child, node, **kwargs):
+def matchtext(child, x, **kwargs):
 	"""Match against text.
 	"""
 	return type(child) in StringTypes \
-		and type(node) in StringTypes \
-		and child == node
+		and child == x
