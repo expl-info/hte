@@ -48,3 +48,7 @@ def matchtext(child, node, **kwargs):
 	return type(child) in StringTypes \
 		and type(node) in StringTypes \
 		and child == node
+
+def matchregexp(child, node, **kwargs):
+	return type(child) in StringTypes \
+		and node.match(child)
