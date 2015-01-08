@@ -27,6 +27,11 @@ class Matcher:
 			return True
 		return self.matchfn(child, self.x)
 
+def matchall(child, x, **kwargs):
+	"""Match all. Simple iterator.
+	"""
+	return True
+
 def matchany(child, x, **kwargs):
 	"""Match against text or element.
 	"""
