@@ -27,10 +27,11 @@ class Matcher:
 			return True
 		return self.matchfn(child, self.node)
 
-def matchtext(child, node, **kwargs):
-	return type(child) in StringTypes \
-		and type(node) in StringTypes \
-		and child == node
+def matchany(child, node, **kwargs):
+	if type(child) in StringTypes:
+		return matchtext(child, node)
+	elif isinstance(child, Elem):
+		return matchelem(child, node)
 
 def matchelem(child, node, **kwargs):
 	if type(child) == type(node) \
@@ -43,8 +44,7 @@ def matchelem(child, node, **kwargs):
 		return True
 	return False
 
-def matchany(child, node, **kwargs):
-	if type(child) in StringTypes:
-		return matchtext(child, node)
-	elif isinstance(child, Elem):
-		return matchelem(child, node)
+def matchtext(child, node, **kwargs):
+	return type(child) in StringTypes \
+		and type(node) in StringTypes \
+		and child == node
