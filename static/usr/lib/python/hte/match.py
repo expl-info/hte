@@ -33,6 +33,16 @@ def matchany(child, node, **kwargs):
 	elif isinstance(child, Elem):
 		return matchelem(child, node)
 
+def matchchildregexp(child, node, **kwargs):
+	return isinstance(child, Elem) \
+		and child.children \
+		and matchregexp(child.children[0], node)
+
+def matchchildtext(child, node, **kwargs):
+	return isinstance(child, Elem) \
+		and child.children \
+		and matchtext(child.children[0], node)
+
 def matchelem(child, node, **kwargs):
 	if type(child) == type(node) \
 		and isinstance(child, Elem) \
