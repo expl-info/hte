@@ -210,6 +210,3 @@ class BaseTree:
                 return Elem(tag, *args, void=isvoidtag, ht=self, **kwargs)
             return _Elem
         raise AttributeError(attr)
-
-    def render(self):
-        return self._top.render()
