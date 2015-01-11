@@ -176,7 +176,6 @@ class BaseTree:
     """
 
     def __init__(self, **kwargs):
-        self._top = Elem(None, ht=self)
         self._warnings = []
 
         # flags
