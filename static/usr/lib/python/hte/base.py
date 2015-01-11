@@ -182,9 +182,9 @@ class BaseTree:
         # flags
         self._anytag = kwargs.get("anytag", False)
         self._attrminimize = kwargs.get("attrminimize", False)
-        self._voidtags = kwargs.get("voidtags", [])
         self._ignorecase = kwargs.get("ignorecase", False)
         self._lowercase = kwargs.get("lowercase", False)
+        self._voidtags = kwargs.get("voidtags", [])
 
         tags = kwargs.get("tags", [])
         voidtags = kwargs.get("voidtags", [])
