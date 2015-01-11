@@ -155,11 +155,24 @@ class Raw:
         self.txt = txt
 
     def _render(self):
+        """Render raw text as is (no escaping).
+        """
         return self.txt
 
 class BaseTree:
     """Dynamically supports methods named to match tags subject to
     configuration.
+
+    All top-level (i.e., non-prefixed) methods are reserved for
+    element names (determined by the configuration). At
+    instantiation, the following keyword arguments are supported:
+    * anytag - allow any tag (bool)
+    * attrminimize - automatically minimize attribute names (bool)
+    * ignorecase - ignore tag case (bool)
+    * lowercase - automatically lowercase tag name (bool)
+    * voidtags - list of void tags (i.e., do not need closing tag)
+
+    They affect handling and rendering.
     """
 
     def __init__(self, **kwargs):
@@ -184,6 +197,10 @@ class BaseTree:
         self._voidtagsd = dict([(name, None) for name in self._voidtags])
 
     def __getattr__(self, attr):
+        """Return a special object which can be instatiated to an
+        Elem object with the tag corresponding to the method name
+        used.
+        """
         tag = self._ignorecase and attr.lower() or attr
         isvoidtag = tag in self._voidtagsd
         if tag in self._tagsd or self._anytag:
