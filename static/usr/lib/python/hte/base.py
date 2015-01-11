@@ -211,8 +211,5 @@ class BaseTree:
             return _Elem
         raise AttributeError(attr)
 
-    def _elem(self, *args, **kwargs):
-        return Elem(*args, **kwargs)
-
     def render(self):
         return self._top.render()
