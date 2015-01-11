@@ -198,14 +198,31 @@ class BaseTree:
     def __getattr__(self, attr):
         """Return a special object which can be instatiated to an
         Elem object with the tag corresponding to the method name
-        used.
+        used and according to the configuration.
         """
-        tag = self._ignorecase and attr.lower() or attr
-        isvoidtag = tag in self._voidtagsd
-        if tag in self._tagsd or self._anytag:
+        tag = self._normtag(attr)
+        if tag == None:
+            raise AttributeError(attr)
+        def _Elem(*args, **kwargs):
+            return self._elem(tag, *args, **kwargs)
+        return _Elem
+
+    def _normtag(self, tag):
+        """Normalize tag according to the configuration.
+        """
+        _tag = self._ignorecase and tag.lower() or tag
+        if _tag in self._tagsd or self._anytag:
             if not self._lowercase:
-                tag = attr
-            def _Elem(*args, **kwargs):
-                return Elem(tag, *args, void=isvoidtag, ht=self, **kwargs)
-            return _Elem
-        raise AttributeError(attr)
+                _tag = tag
+            return _tag
+        return None
+
+    def _elem(self, tag, *args, **kwargs):
+        """Return instatiated Elem object according to the
+        configuration.
+        """
+        isvoidtag = tag in self._voidtagsd
+        tag = self._normtag(tag)
+        if tag == None:
+            raise AttributeError(tag)
+        return Elem(tag, *args, void=isvoidtag, ht=self, **kwargs)
