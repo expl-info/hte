@@ -37,6 +37,7 @@ class BaseParser:
         self.stack = []
 
     def start_element(self, name, attrs):
+        #print "start (%s) (%s)" % (name, attrs)
         last = self.stack[-1]
         el = self._ht._elem(name, attrs=dict(attrs))
         last.add(el)
@@ -44,8 +45,10 @@ class BaseParser:
             self.stack.append(el)
 
     def end_element(self, name):
+        #print "end (%s)" % (name,)
         last = self.stack[-1]
         if last.tag != name:
+            #print self.stack
             raise Exception("error: end tag expected (%s) got (%s)" % (last.tag, name))
         self.stack.pop()
 
