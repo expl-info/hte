@@ -10,7 +10,7 @@ from __future__ import absolute_import
 
 from hte.base import Elem, Raw, BaseTree
 
-def XmlTree(overrides=None):
+def XmlTree(**kwargs):
     attrs = {
         "anytag": True,
         "ignorecase": False,
@@ -19,6 +19,5 @@ def XmlTree(overrides=None):
         "tags": [],
         "voidtags": [],
     }
-    if overrides != None:
-        attrs.update(overrides)
+    attrs.update(**kwargs)
     return BaseTree(**attrs)

@@ -39,7 +39,7 @@ VOIDTAGS = [ "area", "base", "basefont", "br", "col", "frame", "hr", "img", "inp
     "isindex", "link", "meta", "param"
 ]
 
-def Html5Tree(overrides=None):
+def Html5Tree(**kwargs):
     attrs = {
         "anytag": False,
         "attrminimize": True,
@@ -48,11 +48,10 @@ def Html5Tree(overrides=None):
         "tags": TAGS,
         "voidtags": VOIDTAGS,
     }
-    if overrides != None:
-        attrs.update(overrides)
+    attrs.update(**kwargs)
     return BaseTree(**attrs)
 
-def XHtml5Tree(overrides=None):
+def XHtml5Tree(**kwargs):
     attrs = {
         "anytag": False,
         "ignorecase": False,
@@ -61,6 +60,5 @@ def XHtml5Tree(overrides=None):
         "tags": TAGS,
         "voidtags": VOIDTAGS,
     }
-    if overrides != None:
-        attrs.update(overrides)
+    attrs.update(**kwargs)
     return BaseTree(**attrs)
