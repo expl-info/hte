@@ -35,8 +35,12 @@ TAGS = [
     "wbr",
 ]
 
-VOIDTAGS = [ "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input",
-    "isindex", "link", "meta", "param"
+# omision of end tags for non-void tag elements in HTML5 is cookoo
+# (e.g., http://www.w3.org/TR/html-markup/li.html#li-tags)
+VOIDTAGS = [ "area", "base", "br", "col", "embed", "hr", "img",
+    "input", "keygen", "link", "meta", "param", "source", "track", "wbr",
+
+    "basefont", "frame", "isindex",
 ]
 
 def Html5Tree(**kwargs):
