@@ -3,6 +3,12 @@
 # hte/parse.py
 
 """Parsers that produce HTE trees.
+
+For HTML5:
+    f = urllib2.urlopen("https://expl.info/display/HTE/Home")
+    txt = f.read()
+    p = HtmlParser(Html5Tree())
+    doc = p.load(txt)
 """
 
 from __future__ import absolute_import
