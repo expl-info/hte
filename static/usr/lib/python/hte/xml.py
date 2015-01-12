@@ -8,16 +8,18 @@
 
 from __future__ import absolute_import
 
-from hte.base import Elem, Raw, BaseTree
+from hte.base import BaseTree
 
-def XmlTree(**kwargs):
-    attrs = {
-        "anytag": True,
-        "ignorecase": False,
-        "lowercase": False,
-        "attrminimize": False,
-        "tags": [],
-        "voidtags": [],
-    }
-    attrs.update(**kwargs)
-    return BaseTree(**attrs)
+class XmlTree(BaseTree):
+
+    def __init__(self, **kwargs):
+        attrs = {
+            "anytag": True,
+            "ignorecase": False,
+            "lowercase": False,
+            "attrminimize": False,
+            "tags": [],
+            "voidtags": [],
+        }
+        attrs.update(**kwargs)
+        BaseTree.__init__(self, **attrs)

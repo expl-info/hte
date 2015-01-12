@@ -8,7 +8,7 @@
 
 from __future__ import absolute_import
 
-from hte.base import Elem, Raw, BaseTree
+from hte.base import BaseTree
 
 TAGS = [
     "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio",
@@ -43,26 +43,30 @@ VOIDTAGS = [ "area", "base", "br", "col", "embed", "hr", "img",
     "basefont", "frame", "isindex",
 ]
 
-def Html5Tree(**kwargs):
-    attrs = {
-        "anytag": False,
-        "attrminimize": True,
-        "ignorecase": True,
-        "lowercase": True,
-        "tags": TAGS,
-        "voidtags": VOIDTAGS,
-    }
-    attrs.update(**kwargs)
-    return BaseTree(**attrs)
+class Html5Tree(BaseTree):
 
-def XHtml5Tree(**kwargs):
-    attrs = {
-        "anytag": False,
-        "ignorecase": False,
-        "lowercase": True,
-        "attrminimize": False,
-        "tags": TAGS,
-        "voidtags": VOIDTAGS,
-    }
-    attrs.update(**kwargs)
-    return BaseTree(**attrs)
+    def __init__(self, **kwargs):
+        attrs = {
+            "anytag": False,
+            "attrminimize": True,
+            "ignorecase": True,
+            "lowercase": True,
+            "tags": TAGS,
+            "voidtags": VOIDTAGS,
+        }
+        attrs.update(**kwargs)
+        BaseTree.__init__(self, **attrs)
+
+class XHtml5Tree(BaseTree):
+
+    def __init__(self, **kwargs):
+        attrs = {
+            "anytag": False,
+            "ignorecase": False,
+            "lowercase": True,
+            "attrminimize": False,
+            "tags": TAGS,
+            "voidtags": VOIDTAGS,
+        }
+        attrs.update(**kwargs)
+        BaseTree.__init__(self, **attrs)
