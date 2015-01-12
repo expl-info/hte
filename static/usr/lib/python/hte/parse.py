@@ -37,22 +37,22 @@ class BaseParser:
     """Base parser with element handlers.
     """
 
-    def __init__(self, ht, ignorevoiderrors=False):
-        self._ht = ht
-        self._top = Elem(None, ht=self._ht)
+    def __init__(self, tb, ignorevoiderrors=False):
+        self._tb = tb
+        self._top = Elem(None, tb=self._tb)
         self.stack = []
 
     def start_element(self, name, attrs):
         #print "start (%s) (%s)" % (name, attrs)
         last = self.stack[-1]
-        el = self._ht._elem(name, attrs=dict(attrs))
+        el = self._tb._elem(name, attrs=dict(attrs))
         last.add(el)
         if not el.void:
             self.stack.append(el)
 
     def end_element(self, name):
         #print "end (%s)" % (name,)
-        if name in self._ht._voidtagsd:
+        if name in self._tb._voidtagsd:
             return
         last = self.stack[-1]
         if last.tag != name:
@@ -82,8 +82,8 @@ class HtmlParser(BaseParser):
     """Base parser for HTML.
     """
 
-    def __init__(self, ht):
-        BaseParser.__init__(self, ht)
+    def __init__(self, tb):
+        BaseParser.__init__(self, tb)
         self.p = LocalHtmlParser()
         self.p.handle_starttag = self.start_element
         self.p.handle_endtag = self.end_element
@@ -99,8 +99,8 @@ class XmlParser(BaseParser):
     """Base parser for XML.
     """
 
-    def __init__(self, ht):
-        BaseParser.__init__(self, ht)
+    def __init__(self, tb):
+        BaseParser.__init__(self, tb)
         self.p = xml.parsers.expat.ParserCreate()
         self.p.StartElementHandler = self.start_element
         self.p.EndElementHandler = self.end_element

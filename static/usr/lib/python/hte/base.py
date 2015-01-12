@@ -17,9 +17,9 @@ FIND_ELEM = 2
 
 class Node(object):
 
-    def __init__(self, children=None, ht=None):
+    def __init__(self, children=None, tb=None):
         self.children = children or []
-        self.ht = ht
+        self.tb = tb
 
     def _findn(self, count, matcher, parent, path, findtype):
         """A generator to return matches according to the provided
@@ -65,9 +65,9 @@ class Node(object):
             children = [children]
         for child in children:
             if isinstance(child, Node):
-                if type(self.ht) != type(child.ht):
+                if type(self.tb) != type(child.tb):
                     # dissimilar builders
-                    self.ht.warnings.append("mismatched tree type for child (%s)" % child)
+                    self.tb.warnings.append("mismatched tree type for child (%s)" % child)
                 self.children.append(child)
             elif type(child) in types.StringTypes \
                 or isinstance(child, Raw):
@@ -100,8 +100,8 @@ class Elem(Node):
     element tags may be identified.
     """
 
-    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, ht=None):
-        Node.__init__(self, children, ht=ht)
+    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, tb=None):
+        Node.__init__(self, children, tb=tb)
         self.tag = tag
         self.attrs = {}
         self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
@@ -225,4 +225,4 @@ class BaseTree:
         tag = self._normtag(tag)
         if tag == None:
             raise AttributeError(tag)
-        return Elem(tag, *args, void=isvoidtag, ht=self, **kwargs)
+        return Elem(tag, *args, void=isvoidtag, tb=self, **kwargs)
