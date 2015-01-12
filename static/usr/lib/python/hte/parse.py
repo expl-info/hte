@@ -52,6 +52,8 @@ class BaseParser:
 
     def end_element(self, name):
         #print "end (%s)" % (name,)
+        if name in self._ht._voidtagsd:
+            return
         last = self.stack[-1]
         if last.tag != name:
             #print self.stack
