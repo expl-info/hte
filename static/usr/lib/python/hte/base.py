@@ -159,7 +159,7 @@ class Raw:
         """
         return self.txt
 
-class BaseTree:
+class TreeBuilder:
     """Dynamically supports methods named to match tags subject to
     configuration.
 

@@ -8,9 +8,9 @@
 
 from __future__ import absolute_import
 
-from hte.base import BaseTree
+from hte.base import TreeBuilder
 
-class XmlTree(BaseTree):
+class XmlTreeBuilder(TreeBuilder):
 
     def __init__(self, **kwargs):
         attrs = {
@@ -22,4 +22,4 @@ class XmlTree(BaseTree):
             "voidtags": [],
         }
         attrs.update(**kwargs)
-        BaseTree.__init__(self, **attrs)
+        TreeBuilder.__init__(self, **attrs)

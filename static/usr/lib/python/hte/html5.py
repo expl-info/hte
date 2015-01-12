@@ -8,7 +8,7 @@
 
 from __future__ import absolute_import
 
-from hte.base import BaseTree
+from hte.base import TreeBuilder
 
 TAGS = [
     "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio",
@@ -43,7 +43,7 @@ VOIDTAGS = [ "area", "base", "br", "col", "embed", "hr", "img",
     "basefont", "frame", "isindex",
 ]
 
-class Html5Tree(BaseTree):
+class Html5TreeBuilder(TreeBuilder):
 
     def __init__(self, **kwargs):
         attrs = {
@@ -55,9 +55,9 @@ class Html5Tree(BaseTree):
             "voidtags": VOIDTAGS,
         }
         attrs.update(**kwargs)
-        BaseTree.__init__(self, **attrs)
+        TreeBuilder.__init__(self, **attrs)
 
-class XHtml5Tree(BaseTree):
+class XHtml5TreeBuilder(TreeBuilder):
 
     def __init__(self, **kwargs):
         attrs = {
@@ -69,4 +69,4 @@ class XHtml5Tree(BaseTree):
             "voidtags": VOIDTAGS,
         }
         attrs.update(**kwargs)
-        BaseTree.__init__(self, **attrs)
+        TreeBuilder.__init__(self, **attrs)

@@ -7,7 +7,7 @@
 For HTML5:
     f = urllib2.urlopen("https://expl.info/display/HTE/Home")
     txt = f.read()
-    p = HtmlParser(Html5Tree())
+    p = HtmlParser(Html5TreeBuilder())
     doc = p.load(txt)
 """
 

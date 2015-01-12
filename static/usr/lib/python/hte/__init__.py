@@ -11,7 +11,7 @@ build HTML (and similar) document trees.
 
 For example:
 	import hte
-	tb = hte.Html5Tree()
+	tb = hte.Html5TreeBuilder()
 	doc = tb.html()
 	doc.add([tb.body(tb.h1("Hello"), tb.p("This is a story ..."))])
 	print doc.render()
@@ -24,15 +24,15 @@ produces (after pretty printed):
 		</body>
 	</html>
 
-The tree builder (e.g., Html5Tree) provides methods corresponding to
-the element tags (e.g., tb.h1(), tb.table(), tb.br()). The final
-product is generated at render time, with case, void elements, and
-quoting/escaping handled according to the tree builder
-configuration.
+The tree builder (e.g., Html5TreeBuilder) provides methods
+corresponding to the element tags (e.g., tb.h1(), tb.table(),
+tb.br()). The final product is generated at render time, with case,
+void elements, and quoting/escaping handled according to the tree
+builder configuration.
 """
 
 from __future__ import absolute_import
 
 from hte.base import *
-from hte.html5 import Html5Tree, XHtml5Tree
-from hte.xml import XmlTree
+from hte.html5 import Html5TreeBuilder, XHtml5TreeBuilder
+from hte.xml import XmlTreeBuilder
