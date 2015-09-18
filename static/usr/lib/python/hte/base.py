@@ -159,6 +159,19 @@ class Raw:
         """
         return self.txt
 
+class Text(Node):
+
+    def __init__(self, txt):
+        """Text node.
+        """
+        Node.__init__(self)
+        self.txt = txt
+
+    def _render(self):
+        """Return the text string.
+        """
+        return escape(self.txt)
+
 class TreeBuilder:
     """Dynamically supports methods named to match tags subject to
     configuration.
