@@ -58,10 +58,10 @@ class Node(object):
                 pass
         return l
 
-    def add(self, children):
+    def add(self, *children):
         """Add zero/one or more children.
         """
-        if type(children) != types.ListType:
+        if children and type(children[0]) != types.ListType:
             children = [children]
         for child in children:
             if isinstance(child, Node):
