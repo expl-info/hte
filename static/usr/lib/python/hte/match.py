@@ -18,63 +18,63 @@ from hte.base import Elem
 
 class Matcher:
 
-	def __init__(self, x, matchfn):
-		self.x = x
-		self.matchfn = matchfn
+    def __init__(self, x, matchfn):
+        self.x = x
+        self.matchfn = matchfn
 
-	def match(self, child):
-		if self.matchfn == None:
-			return True
-		return self.matchfn(child, self.x)
+    def match(self, child):
+        if self.matchfn == None:
+            return True
+        return self.matchfn(child, self.x)
 
 def matchall(child, x, **kwargs):
-	"""Match all. Simple iterator.
-	"""
-	return True
+    """Match all. Simple iterator.
+    """
+    return True
 
 def matchany(child, x, **kwargs):
-	"""Match against text or element.
-	"""
-	if isinstance(child, Text) or isinstance(child, Raw):
-		return matchtext(child, x)
-	elif isinstance(child, Elem):
-		return matchelem(child, x)
+    """Match against text or element.
+    """
+    if isinstance(child, Text) or isinstance(child, Raw):
+        return matchtext(child, x)
+    elif isinstance(child, Elem):
+        return matchelem(child, x)
 
 def matchchildregexp(child, x, **kwargs):
-	"""Match against element with a child that matches against a
-	compiled regexp.
-	"""
-	return isinstance(child, Elem) \
-		and child.children \
-		and matchregexp(child.children[0], x)
+    """Match against element with a child that matches against a
+    compiled regexp.
+    """
+    return isinstance(child, Elem) \
+        and child.children \
+        and matchregexp(child.children[0], x)
 
 def matchchildtext(child, x, **kwargs):
-	"""Match against element with a child that matches against text.
-	"""
-	return isinstance(child, Elem) \
-		and child.children \
-		and matchtext(child.children[0], x)
+    """Match against element with a child that matches against text.
+    """
+    return isinstance(child, Elem) \
+        and child.children \
+        and matchtext(child.children[0], x)
 
 def matchelem(child, x, **kwargs):
-	"""Match against an element.
-	"""
-	if isinstance(child, Elem) \
-		and child.tag == x.tag \
-		and len(child.attrs) == len(x.attrs):
-		for k, v in child.attrs.items():
-			if k not in x.attrs or v != x[attrs]:
-				return False
-		return True
-	return False
+    """Match against an element.
+    """
+    if isinstance(child, Elem) \
+        and child.tag == x.tag \
+        and len(child.attrs) == len(x.attrs):
+        for k, v in child.attrs.items():
+            if k not in x.attrs or v != x[attrs]:
+                return False
+        return True
+    return False
 
 def matchregexp(child, x, **kwargs):
-	"""Match against a compiled regexp.
-	"""
-	return (isinstance(child, Text) or isinstance(child, Raw)) \
-		and x.match(child.txt)
+    """Match against a compiled regexp.
+    """
+    return (isinstance(child, Text) or isinstance(child, Raw)) \
+        and x.match(child.txt)
 
 def matchtext(child, x, **kwargs):
-	"""Match against text.
-	"""
-	return (isinstance(child, Text) or isinstance(child, Raw)) \
-		and child == x
+    """Match against text.
+    """
+    return (isinstance(child, Text) or isinstance(child, Raw)) \
+        and child == x
