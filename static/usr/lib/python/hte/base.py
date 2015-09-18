@@ -135,6 +135,16 @@ class Elem(Node):
             l.append("</%s>" % self.tag)
         return l
 
+    def add(self, *children):
+        """Override to support automatic conversion of strings to Text node.
+        """
+        children = list(children)
+        if children:
+            if type(children[0]) == types.ListType:
+                children = children[0]
+            children = [type(child) in types.StringTypes and Text(child) or child for child in children]
+        return Node.add(self, children)
+
     def set(self, *args, **kwargs):
         children = args and args[0] or None
         if children != None:
