@@ -35,10 +35,12 @@ def matchall(child, x, **kwargs):
 def matchany(child, x, **kwargs):
     """Match against text or element.
     """
-    if isinstance(child, Text) or isinstance(child, Raw):
-        return matchtext(child, x)
-    elif isinstance(child, Elem):
-        return matchelem(child, x)
+    return isinstance(child, Node) and child == x
+
+def matchanytext(child, x, **kwargs):
+    """Match against text (Text or Raw).
+    """
+    return (isinstance(child, Text) or isinstance(child, Raw)) and child == x
 
 def matchchildregexp(child, x, **kwargs):
     """Match against element with a child that matches against a
@@ -58,14 +60,7 @@ def matchchildtext(child, x, **kwargs):
 def matchelem(child, x, **kwargs):
     """Match against an element.
     """
-    if isinstance(child, Elem) \
-        and child.tag == x.tag \
-        and len(child.attrs) == len(x.attrs):
-        for k, v in child.attrs.items():
-            if k not in x.attrs or v != x[attrs]:
-                return False
-        return True
-    return False
+    return isinstance(child, Elem) and child == x
 
 def matchregexp(child, x, **kwargs):
     """Match against a compiled regexp.
@@ -76,5 +71,4 @@ def matchregexp(child, x, **kwargs):
 def matchtext(child, x, **kwargs):
     """Match against text.
     """
-    return (isinstance(child, Text) or isinstance(child, Raw)) \
-        and child == x
+    return isinstance(child, Text) and child == x
