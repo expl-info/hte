@@ -51,8 +51,6 @@ class Node(object):
         for child in self.children:
             if isinstance(child, Node):
                 l.extend(child._render())
-            elif type(child) in types.StringTypes:
-                l.append(escape(child))
             else:
                 # warn?
                 pass
@@ -68,8 +66,6 @@ class Node(object):
                 if type(self.tb) != type(child.tb):
                     # dissimilar builders
                     self.tb.warnings.append("mismatched tree type for child (%s)" % child)
-                self.children.append(child)
-            elif type(child) in types.StringTypes:
                 self.children.append(child)
             elif hasattr(child, "_render") and callable(child._render):
                 self.children.append(child)

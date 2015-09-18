@@ -35,7 +35,7 @@ def matchall(child, x, **kwargs):
 def matchany(child, x, **kwargs):
 	"""Match against text or element.
 	"""
-	if type(child) in StringTypes:
+	if isinstance(child, Text) or isinstance(child, Raw):
 		return matchtext(child, x)
 	elif isinstance(child, Elem):
 		return matchelem(child, x)
@@ -70,11 +70,11 @@ def matchelem(child, x, **kwargs):
 def matchregexp(child, x, **kwargs):
 	"""Match against a compiled regexp.
 	"""
-	return type(child) in StringTypes \
-		and x.match(child)
+	return (isinstance(child, Text) or isinstance(child, Raw)) \
+		and x.match(child.txt)
 
 def matchtext(child, x, **kwargs):
 	"""Match against text.
 	"""
-	return type(child) in StringTypes \
+	return (isinstance(child, Text) or isinstance(child, Raw)) \
 		and child == x
