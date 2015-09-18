@@ -147,11 +147,12 @@ class Elem(Node):
         """
         return "".join(self._render())
 
-class Raw:
+class Raw(Node):
     """Raw/unprocessed text.
     """
 
     def __init__(self, txt):
+        Node.__init__(self)
         self.txt = txt
 
     def _render(self):
