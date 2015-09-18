@@ -21,6 +21,9 @@ class Node(object):
         self.children = children or []
         self.tb = tb
 
+    def __eq__(self, other):
+        return False
+
     def _findn(self, count, matcher, parent, path, findtype):
         """A generator to return matches according to the provided
         matcher. Returned values are matched elements or the full
@@ -101,6 +104,17 @@ class Elem(Node):
         self.attrs = {}
         self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
 
+    def __eq__(self, other):
+        if isinstance(other, Elem) \
+            and self.tag == other.tag \
+            and len(self.attrs) == len(other.attrs):
+            oattrs = other.attrs
+            for k, v in self.attrs.items():
+                if k not in oattrs or v != oattrs[k]:
+                    return False
+            return True
+        return False
+
     def __str__(self):
         return "<Elem tag=%s nattrs=%s nchildren=%s>" % (self.tag, len(self.attrs), len(self.children))
 
@@ -150,6 +164,9 @@ class Raw(Node):
         Node.__init__(self)
         self.txt = txt
 
+    def __eq__(self, other):
+        return isinstance(other, Raw) and self.txt == other.txt
+
     def _render(self):
         """Render raw text as is (no escaping).
         """
@@ -162,6 +179,9 @@ class Text(Node):
         """
         Node.__init__(self)
         self.txt = txt
+
+    def __eq__(self, other):
+        return isinstance(other, Text) and self.txt == other.txt
 
     def _render(self):
         """Return the text string.
