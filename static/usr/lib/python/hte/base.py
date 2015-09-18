@@ -66,7 +66,7 @@ class Node(object):
             children = children[0]
         for child in children:
             if isinstance(child, Node):
-                if type(self.tb) != type(child.tb):
+                if child.tb != None and type(self.tb) != type(child.tb):
                     # dissimilar builders
                     self.tb.warnings.append("mismatched tree type for child (%s)" % child)
                 self.children.append(child)
