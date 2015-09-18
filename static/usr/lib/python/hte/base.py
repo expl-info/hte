@@ -62,8 +62,8 @@ class Node(object):
     def add(self, *children):
         """Add zero/one or more children.
         """
-        if children and type(children[0]) != types.ListType:
-            children = [children]
+        if children and type(children[0]) == types.ListType:
+            children = children[0]
         for child in children:
             if isinstance(child, Node):
                 if type(self.tb) != type(child.tb):
