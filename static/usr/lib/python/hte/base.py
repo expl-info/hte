@@ -135,9 +135,13 @@ class Elem(Node):
         """
         l = []
         if self.tag:
-            l.append("<%s %s>" \
-                % (self.tag,
-                    self.attrs and " ".join([v != None and k+"="+quoteattr(v) or k for k, v in self.attrs.items()]) or ""))
+            al = []
+            for k, v, in self.attrs.items():
+                if v == True:
+                    al.append(k)
+                elif v not in [None, False]:
+                    al.append("%s=%s" % (k, quoteattr(v)))
+            l.append("<%s %s>" % (self.tag, " ".join(al)))
         l.extend(Node._render(self))
         if self.tag and not self.void:
             l.append("</%s>" % self.tag)
