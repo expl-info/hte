@@ -94,15 +94,23 @@ class Node(object):
 
 class Elem(Node):
     """Generic element with tag specified. Children are optional, as
-    are id, class, and generic element attribute settings. Void
+    are: id, class, and generic element attribute settings. Void
     element tags may be identified.
     """
 
-    def __init__(self, tag, children=None, _id=None, _class=None, attrs=None, void=None, tb=None):
-        Node.__init__(self, children, tb=tb)
+    def __init__(self, tag, *children, **kwargs):
+        """Initialize the object where **kwargs provides _id,
+        _class, attrs, void, tb.
+        """
+        # to ensure string->Text promotion, set children via
+        # Elem.set() or Elem.add() not Node.__init__()
+        Node.__init__(self, tb=kwargs.get("tb"))
         self.tag = tag
         self.attrs = {}
-        self.set(children, _id=_id, _class=_class, attrs=attrs, void=void)
+        children = list(children)
+        if children and type(children[0]) == types.ListType:
+            children = children[0]
+        self.set(children, **kwargs)
 
     def __eq__(self, other):
         if isinstance(other, Elem) \
@@ -145,9 +153,9 @@ class Elem(Node):
             children = [type(child) in types.StringTypes and Text(child) or child for child in children]
         return Node.add(self, children)
 
-    def set(self, *args, **kwargs):
-        children = args and args[0] or None
-        if children != None:
+    def set(self, children=None, **kwargs):
+        if children:
+            # reset and add
             self.children = []
             self.add(children)
         attrs = kwargs.get("attrs") or {}
