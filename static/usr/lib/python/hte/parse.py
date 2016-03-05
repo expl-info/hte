@@ -19,7 +19,7 @@ try:
 except:
     from html.parser import HTMLParser
 
-from hte import Elem
+from . import Elem
 
 class LocalHtmlParser(HTMLParser):
     pass

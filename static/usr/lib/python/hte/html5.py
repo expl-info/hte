@@ -8,7 +8,7 @@
 
 from __future__ import absolute_import
 
-from hte.base import TreeBuilder
+from .base import TreeBuilder
 
 TAGS = [
     "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio",

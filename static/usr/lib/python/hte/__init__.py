@@ -33,6 +33,6 @@ builder configuration.
 
 from __future__ import absolute_import
 
-from hte.base import *
-from hte.html5 import Html5TreeBuilder, XHtml5TreeBuilder
-from hte.xml import XmlTreeBuilder
+from .base import *
+from .html5 import Html5TreeBuilder, XHtml5TreeBuilder
+from .xml import XmlTreeBuilder

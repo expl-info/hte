@@ -8,7 +8,7 @@
 
 from __future__ import absolute_import
 
-from hte.base import TreeBuilder
+from .base import TreeBuilder
 
 class XmlTreeBuilder(TreeBuilder):
 

@@ -14,7 +14,7 @@ from __future__ import absolute_import
 
 from types import StringTypes
 
-from hte.base import Elem
+from .base import Elem
 
 class Matcher:
 
