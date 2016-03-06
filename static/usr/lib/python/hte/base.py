@@ -17,9 +17,9 @@ FIND_ELEM = 2
 
 class Node(object):
 
-    def __init__(self, children=None, tb=None):
-        self.children = children or []
+    def __init__(self, tb, children=None):
         self.tb = tb
+        self.children = children or []
 
     def __eq__(self, other):
         return False
@@ -98,15 +98,17 @@ class Elem(Node):
     element tags may be identified.
     """
 
-    def __init__(self, tag, *children, **kwargs):
-        """Initialize the object where **kwargs provides _id,
-        _class, attrs, void, tb.
+    def __init__(self, tb, tag, void, *children, **kwargs):
+        """Initialize the object where **kwargs provides all element
+        attributes.
         """
         # to ensure string->Text promotion, set children via
         # Elem.set() or Elem.add() not Node.__init__()
-        Node.__init__(self, tb=kwargs.get("tb"))
+        Node.__init__(self, tb)
         self.tag = tag
+        self.void = void
         self.attrs = {}
+
         children = list(children)
         if children and type(children[0]) == types.ListType:
             children = children[0]
@@ -147,6 +149,14 @@ class Elem(Node):
             l.append("</%s>" % self.tag)
         return l
 
+    def update_attrs(self, **kwargs):
+        for k, v in kwargs.items():
+            if k[0:1] == "_":
+                k = k[1:]
+                self.attrs[k] = v
+            elif k == "attrs":
+                self.attrs.update(v)
+
     def add(self, *children):
         """Override to support automatic conversion of strings to Text node.
         """
@@ -162,15 +172,9 @@ class Elem(Node):
             # reset and add
             self.children = []
             self.add(children)
-        attrs = kwargs.get("attrs") or {}
-        if "_id" in kwargs and kwargs["_id"] != None:
-            attrs["id"] = kwargs["_id"]
-        if "_class" in kwargs and kwargs["_class"] != None:
-            attrs["class"] = kwargs["_class"]
-        if "attrs" in kwargs:
-            self.attrs = attrs
-        if "void" in kwargs:
-            self.void = kwargs["void"]
+        if kwargs:
+            self.attrs = {}
+            self.update_attrs(**kwargs)
         return self
 
     def render(self):
@@ -183,7 +187,7 @@ class Raw(Node):
     """
 
     def __init__(self, txt):
-        Node.__init__(self)
+        Node.__init__(self, None)
         self.txt = txt
 
     def __eq__(self, other):
@@ -199,7 +203,7 @@ class Text(Node):
     def __init__(self, txt):
         """Text node.
         """
-        Node.__init__(self)
+        Node.__init__(self, None)
         self.txt = txt
 
     def __eq__(self, other):
@@ -272,8 +276,7 @@ class TreeBuilder:
         """Return instatiated Elem object according to the
         configuration.
         """
-        isvoidtag = tag in self._voidtagsd
         tag = self._normtag(tag)
         if tag == None:
             raise AttributeError(tag)
-        return Elem(tag, *args, void=isvoidtag, tb=self, **kwargs)
+        return Elem(self, tag, tag in self._voidtagsd, *args, **kwargs)
