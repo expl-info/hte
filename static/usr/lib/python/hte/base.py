@@ -142,6 +142,7 @@ class Elem(Node):
                 if v == True:
                     al.append(k)
                 elif v not in [None, False]:
+                    # WARNING: does not handle non-string values
                     al.append("%s=%s" % (k, quoteattr(v)))
             l.append("<%s %s>" % (self.tag, " ".join(al)))
         l.extend(Node._render(self))
