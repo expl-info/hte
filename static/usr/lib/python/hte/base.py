@@ -144,7 +144,8 @@ class Elem(Node):
                 elif v not in [None, False]:
                     # WARNING: does not handle non-string values
                     al.append("%s=%s" % (k, quoteattr(v)))
-            l.append("<%s %s>" % (self.tag, " ".join(al)))
+            attrs = " ".join(al)
+            l.append("<%s%s%s>" % (self.tag, attrs and " " or "", attrs))
         l.extend(Node._render(self))
         if self.tag and not self.void:
             l.append("</%s>" % self.tag)
