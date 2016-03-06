@@ -138,7 +138,7 @@ class Elem(Node):
         l = []
         if self.tag:
             al = []
-            for k, v, in self.attrs.items():
+            for k, v, in sorted(self.attrs.items()):
                 if v == True:
                     al.append(k)
                 elif v not in [None, False]:
