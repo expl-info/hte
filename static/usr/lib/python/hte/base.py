@@ -78,9 +78,11 @@ class Node(object):
         return children and children[0]
 
     def find(self, matcher, findtype=FIND_ELEM):
-        """Return a generator to find a single/first match.
+        """Return the single/first match or None.
         """
-        return self._findn(1, matcher, self, None, findtype)
+        for e in self._findn(1, matcher, self, None, findtype):
+            return e
+        return None
 
     def findall(self, matcher, findtype=FIND_ELEM):
         """Return a generator to find all matches.
