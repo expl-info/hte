@@ -15,9 +15,9 @@ class XmlTreeBuilder(TreeBuilder):
     def __init__(self, **kwargs):
         attrs = {
             "anytag": True,
+            "attrminimize": False,
             "ignorecase": False,
             "lowercase": False,
-            "attrminimize": False,
             "opttags": [],
             "tags": [],
             "voidtags": [],

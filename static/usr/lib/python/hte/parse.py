@@ -42,13 +42,9 @@ class BaseParser:
         self._top = Elem(None, tb=self._tb)
         self.stack = []
 
-    def start_element(self, name, attrs):
-        #print "start (%s) (%s)" % (name, attrs)
+    def char_data(self, text):
         last = self.stack[-1]
-        el = self._tb._elem(name, attrs=dict(attrs))
-        last.add(el)
-        if not el.isvoid():
-            self.stack.append(el)
+        last.add(text)
 
     def end_element(self, name):
         #print "end (%s)" % (name,)
@@ -59,10 +55,6 @@ class BaseParser:
             #print self.stack
             raise Exception("error: end tag expected (%s) got (%s)" % (last.tag, name))
         self.stack.pop()
-
-    def char_data(self, text):
-        last = self.stack[-1]
-        last.add(text)
 
     def load(self, s):
         """Parse ML from string.
@@ -78,6 +70,14 @@ class BaseParser:
         self.parsef(f)
         return self.stack[0]
 
+    def start_element(self, name, attrs):
+        #print "start (%s) (%s)" % (name, attrs)
+        last = self.stack[-1]
+        el = self._tb._elem(name, attrs=dict(attrs))
+        last.add(el)
+        if not el.isvoid():
+            self.stack.append(el)
+
 class HtmlParser(BaseParser):
     """Base parser for HTML.
     """
@@ -85,9 +85,9 @@ class HtmlParser(BaseParser):
     def __init__(self, tb):
         BaseParser.__init__(self, tb)
         self.p = LocalHtmlParser()
-        self.p.handle_starttag = self.start_element
-        self.p.handle_endtag = self.end_element
         self.p.handle_data = self.char_data
+        self.p.handle_endtag = self.end_element
+        self.p.handle_starttag = self.start_element
 
     def parse(self, s):
         self.p.feed(s)
@@ -102,9 +102,9 @@ class XmlParser(BaseParser):
     def __init__(self, tb):
         BaseParser.__init__(self, tb)
         self.p = xml.parsers.expat.ParserCreate()
-        self.p.StartElementHandler = self.start_element
-        self.p.EndElementHandler = self.end_element
         self.p.CharacterDataHandler = self.char_data
+        self.p.EndElementHandler = self.end_element
+        self.p.StartElementHandler = self.start_element
 
     def parse(self, s):
         self.p.Parse(s)

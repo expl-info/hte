@@ -68,9 +68,9 @@ class XHtml5TreeBuilder(TreeBuilder):
     def __init__(self, **kwargs):
         attrs = {
             "anytag": False,
+            "attrminimize": False,
             "ignorecase": False,
             "lowercase": True,
-            "attrminimize": False,
             "opttags": [],
             "tags": TAGS[:],
             "voidtags": [],

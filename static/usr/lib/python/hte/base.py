@@ -280,16 +280,6 @@ class TreeBuilder:
             return self._elem(tag, *args, **kwargs)
         return _Elem
 
-    def _normtag(self, tag):
-        """Normalize tag according to the configuration.
-        """
-        _tag = self._ignorecase and tag.lower() or tag
-        if _tag in self._tags or self._anytag:
-            if not self._lowercase:
-                _tag = tag
-            return _tag
-        return None
-
     def _elem(self, tag, *args, **kwargs):
         """Return instatiated Elem object according to the
         configuration.
@@ -301,3 +291,13 @@ class TreeBuilder:
 
     def _isvoid(self, tag):
         return tag in self._voidtags
+
+    def _normtag(self, tag):
+        """Normalize tag according to the configuration.
+        """
+        _tag = self._ignorecase and tag.lower() or tag
+        if _tag in self._tags or self._anytag:
+            if not self._lowercase:
+                _tag = tag
+            return _tag
+        return None
