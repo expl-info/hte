@@ -51,8 +51,8 @@ class Html5TreeBuilder(TreeBuilder):
             "attrminimize": True,
             "ignorecase": True,
             "lowercase": True,
-            "tags": TAGS,
-            "voidtags": VOIDTAGS,
+            "tags": TAGS[:],
+            "voidtags": VOIDTAGS[:],
         }
         attrs.update(**kwargs)
         TreeBuilder.__init__(self, **attrs)
@@ -65,7 +65,7 @@ class XHtml5TreeBuilder(TreeBuilder):
             "ignorecase": False,
             "lowercase": True,
             "attrminimize": False,
-            "tags": TAGS,
+            "tags": TAGS[:],
             "voidtags": [],
         }
         attrs.update(**kwargs)
