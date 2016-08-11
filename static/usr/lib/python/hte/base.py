@@ -151,6 +151,9 @@ class Elem(Node):
             l.append("</%s>" % self.tag)
         return l
 
+    def isvoid(self):
+        return self.void
+
     def update_attrs(self, **kwargs):
         for k, v in kwargs.items():
             if k[0:1] == "_":

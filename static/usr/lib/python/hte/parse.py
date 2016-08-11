@@ -47,7 +47,7 @@ class BaseParser:
         last = self.stack[-1]
         el = self._tb._elem(name, attrs=dict(attrs))
         last.add(el)
-        if not el.void:
+        if not el.isvoid():
             self.stack.append(el)
 
     def end_element(self, name):
