@@ -18,6 +18,7 @@ class XmlTreeBuilder(TreeBuilder):
             "ignorecase": False,
             "lowercase": False,
             "attrminimize": False,
+            "opttags": [],
             "tags": [],
             "voidtags": [],
         }
