@@ -43,6 +43,11 @@ VOIDTAGS = [ "area", "base", "br", "col", "embed", "hr", "img",
     "basefont", "frame", "isindex",
 ]
 
+OPTVOIDTAGS = [
+    "body", "colgroup", "dd", "dt", "head", "html", "li", "optgroup",
+    "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr",
+]
+
 class Html5TreeBuilder(TreeBuilder):
 
     def __init__(self, **kwargs):
@@ -51,6 +56,7 @@ class Html5TreeBuilder(TreeBuilder):
             "attrminimize": True,
             "ignorecase": True,
             "lowercase": True,
+            "optvoidtags": OPTVOIDTAGS[:],
             "tags": TAGS[:],
             "voidtags": VOIDTAGS[:],
         }
@@ -65,6 +71,7 @@ class XHtml5TreeBuilder(TreeBuilder):
             "ignorecase": False,
             "lowercase": True,
             "attrminimize": False,
+            "optvoidtags": [],
             "tags": TAGS[:],
             "voidtags": [],
         }
