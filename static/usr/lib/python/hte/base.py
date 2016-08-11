@@ -195,6 +195,12 @@ class Raw(Node):
     def __eq__(self, other):
         return isinstance(other, Raw) and self.txt == other.txt
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "<Raw txt='%s'>" % (self.txt.replace("'", "\\'"),)
+
     def _render(self):
         """Render raw text as is (no escaping).
         """
@@ -210,6 +216,12 @@ class Text(Node):
 
     def __eq__(self, other):
         return isinstance(other, Text) and self.txt == other.txt
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "<Text txt='%s'>" % (self.txt.replace("'", "\\'"),)
 
     def _render(self):
         """Return the text string.
