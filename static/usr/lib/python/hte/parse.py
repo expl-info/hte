@@ -51,9 +51,11 @@ class BaseParser:
         if self._tb._isvoid(name):
             return
         last = self.stack[-1]
-        if last.tag != name:
-            #print self.stack
-            raise Exception("error: end tag expected (%s) got (%s)" % (last.tag, name))
+        while last.tag != name:
+            if last.tag not in self._tb._opttags:
+                raise Exception("error: end tag expected (%s) got (%s)" % (last.tag, name))
+            self.stack.pop()
+            last = self.stack[-1]
         self.stack.pop()
 
     def load(self, s):
