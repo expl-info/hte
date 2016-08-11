@@ -39,7 +39,7 @@ class BaseParser:
 
     def __init__(self, tb, ignorevoiderrors=False):
         self._tb = tb
-        self._top = Elem(None, tb=self._tb)
+        self._top = Elem(self._tb, None, False)
         self.stack = []
 
     def char_data(self, text):
