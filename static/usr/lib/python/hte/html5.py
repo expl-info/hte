@@ -66,7 +66,7 @@ class XHtml5TreeBuilder(TreeBuilder):
             "lowercase": True,
             "attrminimize": False,
             "tags": TAGS,
-            "voidtags": VOIDTAGS,
+            "voidtags": [],
         }
         attrs.update(**kwargs)
         TreeBuilder.__init__(self, **attrs)
