@@ -58,7 +58,12 @@ def matchchildtext(child, x, **kwargs):
         and matchtext(child.children[0], x)
 
 def matchelem(child, x, **kwargs):
-    """Match against an element.
+    """Match minimally against an element (name only).
+    """
+    return isinstance(child, Elem) and child.tag == x.tag
+
+def matchelemall(child, x, **kwargs):
+    """Match against an element: name, attributes.
     """
     return isinstance(child, Elem) and child == x
 
