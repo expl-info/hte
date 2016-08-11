@@ -295,3 +295,6 @@ class TreeBuilder:
         if tag == None:
             raise AttributeError(tag)
         return Elem(self, tag, tag in self._voidtags, *args, **kwargs)
+
+    def _isvoid(self, tag):
+        return tag in self._voidtags
