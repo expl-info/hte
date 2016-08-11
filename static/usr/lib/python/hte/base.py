@@ -257,14 +257,14 @@ class TreeBuilder:
         self._lowercase = kwargs.get("lowercase", False)
         self._voidtags = kwargs.get("voidtags", [])
 
-        optvoidtags = kwargs.get("optvoidtags", [])
+        opttags = kwargs.get("opttags", [])
         tags = kwargs.get("tags", [])
         voidtags = kwargs.get("voidtags", [])
         if self._lowercase or self._ignorecase:
-            optvoidtags = map(string.lower, optvoidtags)
+            opttags = map(string.lower, opttags)
             tags = map(string.lower, tags)
             voidtags = map(string.lower, voidtags)
-        self._optvoidtags = set(optvoidtags)
+        self._opttags = set(opttags)
         self._tags = set(tags)
         self._voidtags = set(voidtags)
 

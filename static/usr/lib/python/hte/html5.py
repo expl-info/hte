@@ -43,7 +43,7 @@ VOIDTAGS = [ "area", "base", "br", "col", "embed", "hr", "img",
     "basefont", "frame", "isindex",
 ]
 
-OPTVOIDTAGS = [
+OPTTAGS = [
     "body", "colgroup", "dd", "dt", "head", "html", "li", "optgroup",
     "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr",
 ]
@@ -56,7 +56,7 @@ class Html5TreeBuilder(TreeBuilder):
             "attrminimize": True,
             "ignorecase": True,
             "lowercase": True,
-            "optvoidtags": OPTVOIDTAGS[:],
+            "opttags": OPTTAGS[:],
             "tags": TAGS[:],
             "voidtags": VOIDTAGS[:],
         }
@@ -71,7 +71,7 @@ class XHtml5TreeBuilder(TreeBuilder):
             "ignorecase": False,
             "lowercase": True,
             "attrminimize": False,
-            "optvoidtags": [],
+            "opttags": [],
             "tags": TAGS[:],
             "voidtags": [],
         }
