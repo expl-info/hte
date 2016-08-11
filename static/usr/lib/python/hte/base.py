@@ -198,7 +198,7 @@ class Raw(Node):
     def _render(self):
         """Render raw text as is (no escaping).
         """
-        return self.txt
+        return [self.txt]
 
 class Text(Node):
 
@@ -214,7 +214,7 @@ class Text(Node):
     def _render(self):
         """Return the text string.
         """
-        return escape(self.txt)
+        return [escape(self.txt)]
 
 class TreeBuilder:
     """Dynamically supports methods named to match tags subject to
