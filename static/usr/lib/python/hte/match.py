@@ -27,53 +27,53 @@ class Matcher:
             return True
         return self.matchfn(child, self.x)
 
-def matchall(child, x, **kwargs):
+def match_all(child, x, **kwargs):
     """Match all. Simple iterator.
     """
     return True
 
-def matchany(child, x, **kwargs):
+def match_any(child, x, **kwargs):
     """Match against text or element.
     """
     return isinstance(child, Node) and child == x
 
-def matchanytext(child, x, **kwargs):
+def match_anytext(child, x, **kwargs):
     """Match against text (Text or Raw).
     """
     return (isinstance(child, Text) or isinstance(child, Raw)) and child == x
 
-def matchchildregexp(child, x, **kwargs):
+def match_childregexp(child, x, **kwargs):
     """Match against element with a child that matches against a
     compiled regexp.
     """
     return isinstance(child, Elem) \
         and child.children \
-        and matchregexp(child.children[0], x)
+        and match_regexp(child.children[0], x)
 
-def matchchildtext(child, x, **kwargs):
+def match_childtext(child, x, **kwargs):
     """Match against element with a child that matches against text.
     """
     return isinstance(child, Elem) \
         and child.children \
-        and matchtext(child.children[0], x)
+        and match_text(child.children[0], x)
 
-def matchelem(child, x, **kwargs):
+def match_elem(child, x, **kwargs):
     """Match minimally against an element (name only).
     """
     return isinstance(child, Elem) and child.tag == x.tag
 
-def matchelemall(child, x, **kwargs):
+def match_elemall(child, x, **kwargs):
     """Match against an element: name, attributes.
     """
     return isinstance(child, Elem) and child == x
 
-def matchregexp(child, x, **kwargs):
+def match_regexp(child, x, **kwargs):
     """Match against a compiled regexp.
     """
     return (isinstance(child, Text) or isinstance(child, Raw)) \
         and x.match(child.txt)
 
-def matchtext(child, x, **kwargs):
+def match_text(child, x, **kwargs):
     """Match against text.
     """
     return isinstance(child, Text) and child == x
