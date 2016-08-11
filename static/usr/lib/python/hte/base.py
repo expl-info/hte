@@ -94,6 +94,11 @@ class Node(object):
         """
         return self._findn(count, matcher, self, None, findtype)
 
+    def render(self):
+        """Return the rendered list as a "joined" string.
+        """
+        return "".join(self._render())
+
 class Elem(Node):
     """Generic element with tag specified. Children are optional, as
     are: id, class, and generic element attribute settings. Void
@@ -183,11 +188,6 @@ class Elem(Node):
             self.attrs = {}
             self.update_attrs(**kwargs)
         return self
-
-    def render(self):
-        """Return the rendered list as a "joined" string.
-        """
-        return "".join(self._render())
 
 class Raw(Node):
     """Raw/unprocessed text.
