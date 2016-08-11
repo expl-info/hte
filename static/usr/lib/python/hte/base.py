@@ -259,10 +259,8 @@ class TreeBuilder:
         if self._lowercase or self._ignorecase:
             tags = map(string.lower, tags)
             voidtags = map(string.lower, voidtags)
-        self._tags = tags
-        self._voidtags = voidtags
-        self._tagsd = dict([(name, None) for name in self._tags])
-        self._voidtagsd = dict([(name, None) for name in self._voidtags])
+        self._tags = set(tags)
+        self._voidtags = set(voidtags)
 
     def __getattr__(self, attr):
         """Return a special object which can be instatiated to an
@@ -280,7 +278,7 @@ class TreeBuilder:
         """Normalize tag according to the configuration.
         """
         _tag = self._ignorecase and tag.lower() or tag
-        if _tag in self._tagsd or self._anytag:
+        if _tag in self._tags or self._anytag:
             if not self._lowercase:
                 _tag = tag
             return _tag
@@ -293,4 +291,4 @@ class TreeBuilder:
         tag = self._normtag(tag)
         if tag == None:
             raise AttributeError(tag)
-        return Elem(self, tag, tag in self._voidtagsd, *args, **kwargs)
+        return Elem(self, tag, tag in self._voidtags, *args, **kwargs)
