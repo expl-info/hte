@@ -12,8 +12,6 @@ methods.
 
 from __future__ import absolute_import
 
-from types import StringTypes
-
 from .base import Elem, Node, Raw, Text
 
 class Matcher:

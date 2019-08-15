@@ -9,8 +9,9 @@
 from __future__ import absolute_import
 
 import string
-import types
 from xml.sax.saxutils import escape, quoteattr
+
+from .lib import ListType, StringTypes
 
 FIND_PATH = 1
 FIND_ELEM = 2
@@ -62,7 +63,7 @@ class Node(object):
     def add(self, *children):
         """Add zero/one or more children.
         """
-        if children and type(children[0]) == types.ListType:
+        if children and type(children[0]) == ListType:
             children = children[0]
         for child in children:
             if isinstance(child, Node):
@@ -117,7 +118,7 @@ class Elem(Node):
         self.attrs = {}
 
         children = list(children)
-        if children and type(children[0]) == types.ListType:
+        if children and type(children[0]) == ListType:
             children = children[0]
         self.set(children, **kwargs)
 
@@ -174,9 +175,9 @@ class Elem(Node):
         """
         children = list(children)
         if children:
-            if type(children[0]) == types.ListType:
+            if type(children[0]) == ListType:
                 children = children[0]
-            children = [type(child) in types.StringTypes and Text(child) or child for child in children]
+            children = [type(child) in StringTypes and Text(child) or child for child in children]
         return Node.add(self, children)
 
     def set(self, children=None, **kwargs):
@@ -263,9 +264,9 @@ class TreeBuilder:
         tags = kwargs.get("tags", [])
         voidtags = kwargs.get("voidtags", [])
         if self._lowercase or self._ignorecase:
-            opttags = map(string.lower, opttags)
-            tags = map(string.lower, tags)
-            voidtags = map(string.lower, voidtags)
+            opttags = [s.lower() for s in opttags]
+            tags = [s.lower() for s in tags]
+            voidtags = [s.lower() for s in voidtags]
         self._opttags = set(opttags)
         self._tags = set(tags)
         self._voidtags = set(voidtags)
